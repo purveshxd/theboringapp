@@ -2,6 +2,7 @@
 //
 //     final boredModel = boredModelFromJson(jsonString);
 
+import 'package:hive_flutter/adapters.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -10,6 +11,7 @@ BoredModel boredModelFromJson(String str) =>
 
 String boredModelToJson(BoredModel data) => json.encode(data.toJson());
 
+@HiveType(typeId: 1)
 class BoredModel {
   BoredModel({
     required this.activity,
@@ -20,13 +22,19 @@ class BoredModel {
     required this.key,
     required this.accessibility,
   });
-
+  @HiveField(0)
   String activity;
+  @HiveField(1)
   String type;
+  @HiveField(2)
   int participants;
+  @HiveField(3)
   double price;
+  @HiveField(4)
   String link;
+  @HiveField(5)
   String key;
+  @HiveField(6)
   double accessibility;
 
   BoredModel copyWith({
@@ -45,8 +53,7 @@ class BoredModel {
         price: price,
         link: link,
         key: key,
-        accessibility: accessibility
-        ,
+        accessibility: accessibility,
       );
 
   factory BoredModel.fromJson(Map<String, dynamic> json) => BoredModel(

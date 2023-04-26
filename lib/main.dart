@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:theboringapp/screens/homepage.dart';
+import 'package:theboringapp/screens/welcome_screen.dart';
+import 'package:theboringapp/services/apiservices/bored_model.dart';
+import 'package:theboringapp/services/hiveservices/hivedatabase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +23,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const Homepage(),
+      // home: const WelcomeScreen(),
+      home: HiveDb().dataBox.get('userdata') == ''
+          ? const WelcomeScreen()
+          : const Homepage(),
     );
   }
 }
