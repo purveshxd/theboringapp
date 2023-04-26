@@ -48,7 +48,7 @@ class HiveDb {
     ];
   }
 
-  void putUserData(username) async {
+  void putUserData(String username) async {
     await dataBox.put("userdata", username);
   }
 

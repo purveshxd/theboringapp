@@ -24,9 +24,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const WelcomeScreen(),
-      home: HiveDb().dataBox.get('userdata') == ''
-          ? const WelcomeScreen()
-          : const Homepage(),
+      home: HiveDb().dataBox.get('userdata') == null
+          ? Homepage()
+          : WelcomeScreen(),
+      // ? const WelcomeScreen()
+      // : const Homepage(),
     );
   }
 }
