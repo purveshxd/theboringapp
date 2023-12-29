@@ -1,16 +1,27 @@
-# theboringapp
+![the_boring_app](https://github.com/purveshxd/theboringapp/blob/main/media/the%20boring%20app.png "banner")
 
-A new Flutter project.
+# the boring app
 
-## Getting Started
+When you are bored and have nothing to do, this is what will give you ideas & activities to do.
+### [Link to the apk](https://google.com)
 
-This project is a starting point for a Flutter application.
+### Basic Overview
 
-A few resources to get you started if this is your first Flutter project:
+Made this when I had to do a fun project, which uses ***the bored api*** getting user different activities and then user could save it in the local storage.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Pages/UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Welcome Screen
+
+
+### Homepage
+
+
+
+### Saved Activities 
+
+
+
+### Development status
+
+I've added everything I wanted to add for my personal needs. If requested, I can add more features, but unless I come up with more ideas on functionalities or find bugs while using it, the development will be on pause for now.
