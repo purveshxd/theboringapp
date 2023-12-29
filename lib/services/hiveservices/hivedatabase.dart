@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:theboringapp/services/apiservices/bored_model.dart';
 
@@ -36,7 +35,7 @@ class HiveDb {
     savedActivities = [
       boredModelToJson(
         BoredModel(
-          activity: "default activity number 2",
+          activity: "This is the default activity",
           type: "education",
           participants: 1,
           price: .1,
@@ -44,7 +43,7 @@ class HiveDb {
           key: "4651651",
           accessibility: 5,
         ),
-      )
+      ),
     ];
   }
 
@@ -52,20 +51,23 @@ class HiveDb {
     await dataBox.put("userdata", username);
   }
 
+  void deleteActivity(key) {
+    savedActivities.removeWhere((element) => element['key'] == key);
+    updateActivitiesData();
+  }
+
   String loadUserData() {
     username = dataBox.get('userdata');
     return username;
   }
 
-  void loadActivitiesData() {
-    debugPrint("${dataBox.get('savedActivities')}Hello");
-    // putUserData("purvesh");
-    debugPrint("===================${dataBox.get('userdata')}");
-    final savedActivities = dataBox.get("savedActivities");
+  loadActivitiesData() {
+    List activity = dataBox.get("savedActivities");
+    savedActivities.addAll(activity);
   }
 
-  void updateActivitiesData() async {
-    await dataBox.put("savedActivities", savedActivities);
+  void updateActivitiesData() {
+    dataBox.put("savedActivities", savedActivities);
   }
 
   List isSaved() {

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:theboringapp/constants/constants.dart';
-import 'package:theboringapp/screens/savedActivities.dart';
-import 'package:theboringapp/screens/welcome_Screen.dart';
+import 'package:theboringapp/screens/saved_activities.dart';
 import 'package:theboringapp/services/apiservices/api_service.dart';
 import 'package:theboringapp/services/apiservices/bored_model.dart';
 import 'package:theboringapp/services/hiveservices/hivedatabase.dart';
-import 'package:theboringapp/services/providers/api_providers.dart';
-// import 'package:theboringapp/widgets/nav_bar.dart';
 import 'package:theboringapp/widgets/text_field_custom.dart';
 
 class Homepage extends StatefulWidget {
@@ -23,8 +19,7 @@ class _HomepageState extends State<Homepage> {
   final _mybox = Hive.box('savedActivitiesBox');
   @override
   void initState() {
-    if (_mybox.get('savedActivitiesBox') == null ||
-        _mybox.get('userdata') == null) {
+    if (_mybox.get("savedActivities") == null) {
       hiveDb.initialData();
     } else {
       hiveDb.loadActivitiesData();
@@ -52,7 +47,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: const Color(0xFF111111),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -63,52 +58,47 @@ class _HomepageState extends State<Homepage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Hi,\n'
-                    // TODO - username here
-                    '${hiveDb.loadUserData()}',
+                    'Hi,${hiveDb.loadUserData()}',
                     style: const TextStyle(
-                        fontSize: 35, fontWeight: FontWeight.bold),
+                        fontFamily: 'Monospace',
+                        color: mainTextColor,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        setState(() {
-                          hiveDb.username = '';
-                          hiveDb.putUserData('');
-                        });
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const WelcomeScreen(),
-                            ));
-                        // hiveDb.updateActivitiesData();
-                      },
-                      child: const Text("Delete User"))
                 ],
               ),
               const SizedBox(height: 10),
               Text(
                 "Some random activity for you",
                 style: TextStyle(
-                  color: Colors.grey[600],
-                ),
+                    color: subTextColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
               ),
               const SizedBox(height: 10),
               FutureBuilder(
                 future: ApiService().getRandomActivity(),
                 builder: (context, snapshot) {
+                  // final temp = snapshot.data!.link;
                   if (snapshot.hasData) {
                     return Column(
                       children: [
                         StyleContainerCustom(
-                            '{\n"activity": "${snapshot.data?.activity}",\n"type": "${snapshot.data?.type}",\n"key": "${snapshot.data?.key}"\n'
-                            '"link":"${snapshot.data!.link.isEmpty ? "hey" : snapshot.data?.link}"\n}'),
+                          '{\n'
+                          '\t"activity": "${snapshot.data?.activity}",\n'
+                          '\t"type": "${snapshot.data?.type}",\n'
+                          '\t"key": "${snapshot.data?.key}",\n'
+                          '\t"link":"${snapshot.data!.link}"\n'
+                          '}',
+                          isSaved: false,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: containerColor,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: IconButton(
@@ -129,60 +119,72 @@ class _HomepageState extends State<Homepage> {
                       ],
                     );
                   } else if (snapshot.hasError) {
-                    return StyleContainerCustom(snapshot.error.toString());
+                    return StyleContainerCustom(
+                      snapshot.error.toString(),
+                      isSaved: false,
+                    );
                   } else {
-                    return const StyleContainerCustom("",
-                        widget: CircularProgressIndicator());
+                    return const StyleContainerCustom(
+                      "",
+                      widget: CircularProgressIndicator(),
+                      isSaved: false,
+                    );
                   }
                 },
               ),
-              const Divider(
-                thickness: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Previously saved activities",
-                    style: TextStyle(
-                      color: Colors.grey[600],
+              const Divider(),
+              Flexible(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Saved Activities",
+                          style: TextStyle(
+                              color: subTextColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16),
+                        ),
+                        const Spacer(),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SavedActivitiesPage(
+                                    allSavedList: hiveDb.savedActivities,
+                                    clearAllActivities: deleteAllActivities,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("More"))
+                      ],
                     ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SavedActivitiesPage(
-                                  clearAllActivities: deleteAllActivities,
-                                  allSavedList: hiveDb.savedActivities),
-                            ));
-                      },
-                      child: const Text("More"))
-                ],
-              ),
-              Expanded(
-                  child: hiveDb.savedActivities == null
-                      ? const Text("No saved Activities")
-                      : ListView.builder(
-                          // reverse: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: hiveDb.savedActivities.length < 5
-                              ? hiveDb.savedActivities.length
-                              : 5,
-
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Flexible(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: hiveDb.savedActivities.length,
                           itemBuilder: (context, index) {
-                            final reverseList = hiveDb.savedActivities.reversed;
+                            final List reversedList =
+                                hiveDb.savedActivities.reversed.toList();
 
                             return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                child: StyleContainerCustom(
-                                    '{\n"activity": "${boredModelFromJson(reverseList.elementAt(index)).activity}"\n}')
-                                // '\n"type": "${boredModelFromJson(reverseList.elementAt(index)).type}"\n}'),
-                                );
-                          },
-                        ))
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: StyleContainerCustom(
+                                '${index + 1}. ${reversedList[index].split(':')[1].toString().split(',')[0].toString()}',
+                                isSaved: false,
+                              ),
+                            );
+                          }),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),

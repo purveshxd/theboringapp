@@ -3,7 +3,6 @@
 //     final boredModel = boredModelFromJson(jsonString);
 
 import 'package:hive_flutter/adapters.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 BoredModel boredModelFromJson(String str) =>
