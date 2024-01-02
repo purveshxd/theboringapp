@@ -10,18 +10,7 @@ When you are bored and have nothing to do, this is what will give you ideas & ac
 Made this when I had to do a fun project, which uses ***the bored api*** getting user different activities and then user could save it in the local storage.
 
 ## Pages/UI
-
-### Welcome Screen
-
-
-### Homepage
-
-
-
-### Saved Activities 
-
-
-
+![the_boring_app](https://github.com/purveshxd/theboringapp/blob/main/media/the_boring_app_banner.png "banner")
 ### Development status
 
 I've added everything I wanted to add for my personal needs. If requested, I can add more features, but unless I come up with more ideas on functionalities or find bugs while using it, the development will be on pause for now.
