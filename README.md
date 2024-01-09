@@ -3,7 +3,8 @@
 # the boring app
 
 When you are bored and have nothing to do, this is what will give you ideas & activities to do.
-### [Link to the apk](https://google.com)
+
+### [Link to the apk](https://drive.google.com/file/d/1ITb3TCiWPtwhmKe1yn8rT_PLLAI3ROuK/view?usp=drive_link)
 
 ### Basic Overview
 
